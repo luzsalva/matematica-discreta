@@ -66,7 +66,24 @@ class Entrega {
      * És cert que ∃!x ∀y. P(y) -> Q(x,y) ?
      */
     static boolean exercici2(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
-      return false; // TO DO
+       for (int y : universe) {  
+        if (p.test(y)) {
+            boolean existeUnaX = false;
+            for (int x : universe) {
+                if (q.test(x, y)) {
+                    if (existeUnaX) {
+                        return false;
+                    } else {
+                        existeUnaX = true;
+                    }
+                }
+            }
+            if (!existeUnaX) {
+                return false;
+            }
+        }
+    }
+    return true;
     }
 
     /*
