@@ -73,7 +73,42 @@ class Entrega {
      * És cert que ∃x,y ∀z. P(x,z) ⊕ Q(y,z) ?
      */
     static boolean exercici3(int[] universe, BiPredicate<Integer, Integer> p, BiPredicate<Integer, Integer> q) {
-      return false; // TO DO
+      // Utilizamos 3 bucles para comprobar todas las combinaciones de x, y y z en el array
+    for (int z : universe) {
+        // Variable para comprobar si se cumple ∀ z
+        boolean zExists = false; 
+        for (int x : universe) {
+            boolean valorP = true;
+            for (int y : universe) {
+                boolean valorQ = true;
+                if (!p.test(x, z)) {
+                    valorP = false;
+                }
+                if (!q.test(y, z)) {
+                    valorQ = false;
+                }
+                // Verificamos si se cumple P(x, z) ⊕ Q(y, z)
+                if (valorP ^ valorQ) {
+                    //se verifica que ∀ z se cumple el enunciado
+                    zExists = true; 
+                    // Salimos del bucle "y" ya que no es necesario seguir probando con otros valores de y
+                    break; 
+                }
+            }
+
+            if (zExists) {
+                // Salimos del bucle "x" ya que no es necesario seguir probando con otros valores de x
+                break; 
+            }
+        }
+        if (!zExists) {
+            System.out.println("Ejercicio 3 Tema 1 - FALSO ");
+            return false;
+        }
+    }
+    System.out.println("Ejercicio 3 Tema 1 - VERDADERO ");
+    return true;
+}
     }
 
     /*
