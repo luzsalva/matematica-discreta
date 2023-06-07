@@ -258,9 +258,34 @@ class Entrega {
      *
      * Podeu soposar que `a` i `b` estan ordenats de menor a major.
      */
-    static boolean exercici3(int[] a, int[] b, int[][] rel) {
-      return false; // TO DO
-    }
+static boolean exercici3(int[] a, int[] b, int[][] rel) {
+          for (int valorA : a) {
+              boolean relacionEncontrada = false;
+              for (int[] parejaRel : rel) {
+                  if (parejaRel[0] == valorA) {
+                      // Se encontró una relación para el valor en a[i]
+                      if (relacionEncontrada) {
+                          // Ya se encontró una relación previamente, por lo que no es una función
+                          System.out.println("Ejercicio 3 Tema 2 - FALSO ");
+                          return false;
+                      }
+                      relacionEncontrada = true;
+                      if (parejaRel[1] != b[valorA]) {
+                          // La relación no cumple con la correspondencia en b[i]
+                          System.out.println("Ejercicio 3 Tema 2 - FALSO ");
+                          return false;
+                      }
+                  }
+              }
+              if (!relacionEncontrada) {
+                  // No se encontró ninguna relación para el valor en a[i]
+                  System.out.println("Ejercicio 3 Tema 2 - FALSO ");
+                  return false;
+              }
+          }
+          System.out.println("Ejercicio 3 Tema 2 - VERDADERO ");
+          return true;
+      }
 
     /*
      * Suposau que `f` és una funció amb domini `dom` i codomini `codom`.  Retornau:
