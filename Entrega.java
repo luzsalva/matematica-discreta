@@ -486,9 +486,32 @@ static boolean exercici3(int[] a, int[] b, int[][] rel) {
     /*
      * Suposau que el graf (no dirigit) és connex. És bipartit?
      */
-    static boolean exercici2(int[][] g) {
-      return false; // TO DO
+static boolean exercici2(int[][] g) {
+    int n = g.length;
+    int[] asignación = new int[n];
+    Arrays.fill(asignación, -1);
+
+    for (int i = 0; i < n; i++) {
+        if (asignación[i] == -1) {
+            asignación[i] = 1;
+            List<Integer> lista = new ArrayList<>();
+            lista.add(i);
+
+            while (!lista.isEmpty()) {
+                int u = lista.remove(0);
+                for (int v : g[u]) {
+                    if (asignación[v] == -1) {
+                        asignación[v] = 1 - asignación[u];
+                        lista.add(v);
+                    } else if (asignación[v] == asignación[u]) {
+                        return false;
+                    }
+                }
+            }
+        }
     }
+    return true;
+}
 
     /*
      * Suposau que el graf és un DAG. Retornau el nombre de descendents amb grau de sortida 0 del
@@ -650,8 +673,31 @@ static boolean exercici3(int[] a, int[] b, int[][] rel) {
      * Si no en té, retornau null.
      */
     static int[] exercici2a(int[] b, int[] n) {
-      return null; // TO DO
+    int x = 0;
+    int N = 1;
+    for (int ni : n) {
+        N *= ni;
     }
+    for (int i = 0; i < b.length; i++) {
+        int Ni = N / n[i];
+        int Mi = -1;
+        for (int j = 1; j < n[i]; j++) {
+            if ((Ni * j) % n[i] == 1) {
+                Mi = j;
+                break;
+            }
+        }
+        if (Mi == -1) {
+            return null;
+        }
+        x += b[i] * Ni * Mi;
+    }
+    x %= N;
+    if (x < 0) {
+        x += N;
+    }
+    return new int[]{x, N};
+}
 
     /*
      * Donau la solució (totes) del sistema d'equacions
