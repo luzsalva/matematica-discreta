@@ -517,9 +517,41 @@ static boolean exercici2(int[][] g) {
      * Suposau que el graf és un DAG. Retornau el nombre de descendents amb grau de sortida 0 del
      * vèrtex i-èssim.
      */
-    static int exercici3(int[][] g, int i) {
-      return -1; // TO DO
-    }
+      static int exercici3(int[][] g, int i) {
+          //Asignamos al contador de descendientes con grado de salida 0 el método
+          // para analizar los descendientes de un vértice dado
+          int descendientesGS0= analisisDescendientes(g, i, new boolean[g.length]);; 
+
+          if (descendientesGS0> 0) {
+              System.out.println("Ejercicio 3 Tema 3 - "+descendientesGS0);
+              return descendientesGS0;
+          } else {
+              //No hay descendientes con grado de salida 0
+              return -1; 
+          }
+      }
+
+      static int analisisDescendientes(int[][] g, int vertice, boolean[] visitados) {
+          //Marca los vértices visitados durante el análisis de los descendientes
+          visitados[vertice] = true;
+          //Inicialización del contador de descendientes con grado de salida 0
+          int contador = 0;
+
+          for (int verticeAdj : g[vertice]) {
+              //Nos aseguramos de que un vértice adyacente no se cuente 
+              //nuevamente si ya ha sido visitado
+              if (!visitados[verticeAdj]) {
+                  if (g[verticeAdj].length == 0) {
+                      contador++;
+                  } else {
+                      //Si el vértice adjunto tiene grado de salida no nulo, 
+                      //explora sus descendientes de forma recursiva
+                      contador += analisisDescendientes(g, verticeAdj, visitados);
+                  }
+              }
+          }
+          return contador;
+      }
 
     /*
      * Donat un arbre arrelat (dirigit, suposau que l'arrel es el vèrtex 0), trobau-ne el diàmetre.
