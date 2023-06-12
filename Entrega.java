@@ -250,7 +250,58 @@ class Entrega {
      * Podeu soposar que `a` està ordenat de menor a major.
      */
     static int exercici2(int[] a, int[][] rel) {
-      return 0; // TO DO
+        int contador_reflexiva = 0;
+
+        for (int x[] : rel) {
+            if ((x[0] == x[1])) {
+                contador_reflexiva++;
+            }
+
+            if (x[0] != x[1]) {
+                for (int y[] : rel) {
+                    if (!(y[0] == y[1]) && (y[0] == y[1])) {
+                        return -1;
+                    }
+                }
+            }
+
+            for (int y[] : rel) {
+                for (int z[] : rel) {
+                    if (((x[0] == y[1]) && (y[1] == z[0]))) {
+                        if (!(x[0] == z[0])) {
+                            return -1;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (contador_reflexiva >= a.length) {
+Map<Integer, Set<Integer>> clasesDeEquivalencia = new HashMap<>();
+for (int[] pair : rel) {
+    int x = pair[0];
+    int y = pair[1];
+        if (!clasesDeEquivalencia.containsKey(x)) {
+            clasesDeEquivalencia.put(x, new HashSet<>());
+        }
+        if (!clasesDeEquivalencia.containsKey(y)) {
+            clasesDeEquivalencia.put(y, new HashSet<>());
+        }
+    clasesDeEquivalencia.get(x).add(y);
+    clasesDeEquivalencia.get(y).add(x);
+}
+
+Set<Set<Integer>> clasesUnicasDeEquivalencia = new HashSet<>();
+for (int x : a) {
+    if (clasesDeEquivalencia.containsKey(x)) {
+        clasesUnicasDeEquivalencia.add(clasesDeEquivalencia.get(x));
+    }
+}
+
+return clasesUnicasDeEquivalencia.size();
+        } else {
+            return -1;
+        }
     }
 
     /*
