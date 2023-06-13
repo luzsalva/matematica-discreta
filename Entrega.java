@@ -805,9 +805,22 @@ static boolean exercici2(int[][] g) {
      * No fa falta que cerqueu algorismes avançats de factorització, podeu utilitzar la força bruta
      * (el que coneixeu com el mètode manual d'anar provant).
      */
-    static ArrayList<Integer> exercici3a(int n) {
-      return new ArrayList<>(); // TO DO
-    }
+      static ArrayList<Integer> exercici3a(int n) {
+          //Almacena los factores primos de n
+          ArrayList<Integer> factoresPrimos = new ArrayList<>();
+          System.out.print("Ejercicio 3a Tema 4 - (" +n+ ")-->");
+          for (int i = 2; i <= n; i++) {
+              //Comprobamos si n es divisible por el factor primo actual
+              while (n % i == 0) {
+                  factoresPrimos.add(i);
+                  //Actualizamos el valor de n dividiéndolo por el factor primo
+                  //(n /= i)
+                  n /= i;
+              }
+          }
+          System.out.println(factoresPrimos);
+          return factoresPrimos;
+      }
 
     /*
      * Retornau el nombre d'elements invertibles a Z mòdul n³.
