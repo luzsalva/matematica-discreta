@@ -793,8 +793,58 @@ static boolean exercici2(int[][] g) {
      * Si no en té, retornau null.
      */
     static int[] exercici2b(int[] a, int[] b, int[] n) {
-      return null; // TO DO
+    int x = 0;
+    int m = 1;
+    for (int i = 0; i < a.length; i++) {
+        while (a[i] < 0) {
+            a[i] += n[i];
+            b[i] += n[i];
+        }
+        a[i] %= n[i];
+        b[i] %= n[i];
+        if (a[i] == 0 || n[i] == 0) return null;
+        int d = gcd(a[i], n[i]);
+        if (b[i] % d != 0) return null;
+        a[i] /= d;
+        b[i] /= d;
+        n[i] /= d;
+        if (n[i] == 0) return null;
+        int t = (b[i] * inversa(a[i], n[i])) % n[i];
+        if ((t - x) % gcd(m, n[i]) != 0) return null;
+        x = teoremaChinoResto(x, m, t, n[i]);
+        m *= n[i];
     }
+    if (x < 0) x += m;
+    return new int[]{x, m};
+}
+
+static int gcd(int a, int b) {
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+static int inversa(int a, int m) {
+    if (m == 1 || m == 0) return 0;
+    int m0 = m;
+    int y = 0;
+    int x = 1;
+    while (a > 1) {
+        if (m == 0) return 0;
+        int q = a / m;
+        int t = m;
+        m = a % m;
+        a = t;
+        t = y;
+        y = x - q * y;
+        x = t;
+    }
+    if (x < 0) x += m0;
+    return x;
+}
+
+static int teoremaChinoResto(int x1, int m1, int x2, int m2) {
+    if (m1 == 0 || m2 == 0) return 0;
+    return ((x2 - x1) * inversa(m1, m2) % m2 * m1 + x1) % (m1 * m2);
+}
 
     /*
      * Suposau que n > 1. Donau-ne la seva descomposició en nombres primers, ordenada de menor a
