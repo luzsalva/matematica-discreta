@@ -60,7 +60,36 @@ class Entrega {
      * És cert que ∀x ∃!y. P(x) -> Q(x,y) ?
      */
     static boolean exercici1(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
-      return false; // TO DO
+      boolean pdexCumplido=true;
+        boolean qdexyCumplido=false;
+        
+        int contador=0;
+        
+        for(int i=0;i<universe.length;i++){
+            if (p.test(universe[i])==false){
+                pdexCumplido=false;
+                break;
+            }
+        }
+        
+        //SI EL CONTADOR=UNIVERSE.LENGTH
+        
+        //Q(x)
+        if (pdexCumplido==true){
+            //el primer for es para cojeros los valores de las x para mirar si se cumple y
+            for(int i=0;i<universe.length;i++){
+                for(int u=0;u<universe.length;u++){
+                    //System.out.println(q.test(universe[i],universe[u]));
+                    if(q.test(universe[i],universe[u])==true){
+                        contador++;
+                    }
+                }
+            } 
+            if (contador==universe.length){
+                qdexyCumplido=true;
+            }
+        }
+        return !((pdexCumplido==true)&&(qdexyCumplido==false));
     }
 
     /*
@@ -133,7 +162,25 @@ class Entrega {
      * És cert que (∀x. P(x)) -> (∀x. Q(x)) ?
      */
     static boolean exercici4(int[] universe, Predicate<Integer> p, Predicate<Integer> q) {
-      return false; // TO DO
+      boolean pdexCumplido=true;
+        boolean qdexCumplido=true;
+        
+        
+        for(int i=0;i<universe.length;i++){
+            if (p.test(universe[i])==false){
+                pdexCumplido=false;
+                break;
+            }
+        }
+        if (pdexCumplido==true){
+            for(int i=0;i<universe.length;i++){
+                if(q.test(universe[i])==false){
+                    qdexCumplido=false;
+                    break;
+                }
+            }
+        }
+        return !((pdexCumplido==true)&&(qdexCumplido==false));
     }
 
     /*
