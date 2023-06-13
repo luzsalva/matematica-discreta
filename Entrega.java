@@ -62,34 +62,27 @@ class Entrega {
     static boolean exercici1(int[] universe, Predicate<Integer> p, BiPredicate<Integer, Integer> q) {
       boolean pdexCumplido=true;
         boolean qdexyCumplido=false;
-        
-        int contador=0;
+        int contador;
+        int contadorGlobal=0;
         
         for(int i=0;i<universe.length;i++){
             if (p.test(universe[i])==false){
                 pdexCumplido=false;
-                break;
             }
-        }
-        
-        //SI EL CONTADOR=UNIVERSE.LENGTH
-        
-        //Q(x)
-        if (pdexCumplido==true){
-            //el primer for es para cojeros los valores de las x para mirar si se cumple y
-            for(int i=0;i<universe.length;i++){
-                for(int u=0;u<universe.length;u++){
-                    //System.out.println(q.test(universe[i],universe[u]));
-                    if(q.test(universe[i],universe[u])==true){
-                        contador++;
-                    }
+            contador=0;
+            for(int u=0;u<universe.length;u++){
+                if(q.test(universe[i],universe[u])==true){
+                    contador++;
                 }
-            } 
-            if (contador==universe.length){
+            }
+            if (contador==1){
                 qdexyCumplido=true;
             }
+            if (!((pdexCumplido==true)&&(qdexyCumplido==false))){
+                contadorGlobal++;
+            }
         }
-        return !((pdexCumplido==true)&&(qdexyCumplido==false));
+        return contadorGlobal==universe.length;
     }
 
     /*
@@ -162,22 +155,20 @@ class Entrega {
      * És cert que (∀x. P(x)) -> (∀x. Q(x)) ?
      */
     static boolean exercici4(int[] universe, Predicate<Integer> p, Predicate<Integer> q) {
-      boolean pdexCumplido=true;
+        boolean pdexCumplido=true;
         boolean qdexCumplido=true;
-        
-        
+        //P(x)
         for(int i=0;i<universe.length;i++){
             if (p.test(universe[i])==false){
                 pdexCumplido=false;
                 break;
             }
         }
-        if (pdexCumplido==true){
-            for(int i=0;i<universe.length;i++){
-                if(q.test(universe[i])==false){
-                    qdexCumplido=false;
-                    break;
-                }
+        //Q(x)
+        for(int i=0;i<universe.length;i++){
+            if(q.test(universe[i])==false){
+                qdexCumplido=false;
+                break;
             }
         }
         return !((pdexCumplido==true)&&(qdexCumplido==false));
@@ -395,7 +386,39 @@ static boolean exercici3(int[] a, int[] b, int[][] rel) {
      * Podeu suposar que `dom` i `codom` estàn ordenats de menor a major.
      */
     static int exercici4(int[] dom, int[] codom, Function<Integer, Integer> f) {
-      return -1; // TO DO
+      int maximo_Valor=0;
+        //para asignar un minimo en la primera iteracion
+        int minimo_Valor=codom.length;
+        
+        int[] numeros=new int[codom.length];
+        
+        for(int i=0;i<codom.length;i++){
+            int imagen=codom[i];
+            int contador=0;
+            for(int u=0;u<dom.length;u++){
+                int valor=dom[u];
+                if(f.apply(valor)==imagen){
+                    contador++;
+                }
+            }
+            numeros[i]=contador;
+            
+            if(numeros[i]>maximo_Valor){
+                maximo_Valor=numeros[i];
+            }
+            else if(numeros[i]<minimo_Valor){
+                minimo_Valor=numeros[i];
+            }
+        }
+        if(minimo_Valor>0) {
+            return maximo_Valor;
+        }
+        else if(maximo_Valor==1){
+            return dom.length-codom.length;
+        }
+        else {
+            return 0;
+        }
     }
 
     /*
@@ -527,7 +550,12 @@ static boolean exercici3(int[] a, int[] b, int[][] rel) {
      * Retornau l'ordre menys la mida del graf (no dirigit).
      */
     static int exercici1(int[][] g) {
-      return -1; // TO DO
+      int orden=g.length;
+        int sumaNodos = 0;
+        for(int i=0; i<orden; i++){
+            sumaNodos = sumaNodos+g[i].length;
+        }
+        return orden-sumaNodos/2;
     }
 
     /*
@@ -605,7 +633,54 @@ static boolean exercici2(int[][] g) {
      * Suposau que totes les arestes tenen pes 1.
      */
     static int exercici4(int[][] g) {
-      return -1; // TO DO
+        int orden= g.length;
+        int[][] adyaciencia = new int[orden][orden];
+        
+        int[][] distancia = new int[orden][orden];
+        for(int i=0;i<orden;i++){
+            for(int u=0;u<orden;u++){
+                adyaciencia[i][u]=0;
+                distancia[i][u]=0;
+            }
+       }
+        for(int i=0; i<orden; i++){
+            for(int u=0; u<g[i].length; u++){
+                adyaciencia[i][g[i][u]]=1;
+                adyaciencia[g[i][u]][i]=1;
+            }
+        }
+        int[][] caminos1;
+        caminos1=adyaciencia;
+        for(int k=0;k<orden;k++){
+            for(int i=0;i<orden;i++){
+                for(int u=0;u<orden;u++){
+                    if(distancia[i][u]==0 && caminos1[i][u]>0 && i!=u ){
+                        distancia[i][u]=k+1;
+                    }
+                }
+            }
+            int[][] caminos2 = new int[orden][orden];
+            //elevo adj
+            for(int i=0;i<orden;i++){
+                for(int u=0;u<orden;u++){
+                    int suma=0;
+                    for(int h=0; h<orden; h++){
+                        suma=suma+(caminos1[i][h]*adyaciencia[h][u]);
+                    }
+                    caminos2[i][u]=suma;
+                }
+            }
+            caminos1 = caminos2;
+        }
+        int Valor_Maximo=0;
+        for(int i=0;i<orden;i++){
+            for(int u=0;u<orden;u++){
+               if(distancia[i][u]>Valor_Maximo){
+                   Valor_Maximo=distancia[i][u];
+               }
+            }
+        } 
+      return Valor_Maximo;
     }
 
     /*
@@ -734,7 +809,53 @@ static boolean exercici2(int[][] g) {
      * Si no en té, retornau null.
      */
     static int[] exercici1(int a, int b, int n) {
-      return null; // TO DO
+      if(a<0){
+            a=-a;
+            b=-b;
+        }
+        if(b<0){
+            b=b+n;
+        }
+
+        int[] q=new int[50];
+        int[] w=new int[50];
+        int[] x=new int[50];
+
+        w[0]=1;
+        w[1]=0;
+        
+        x[0]=0;
+        x[1]=1;
+        
+        int resto=a;
+        int A=n;
+        int B=a;
+        int C=b;
+        int indiceTemporal=2;
+        int t=0;
+        
+        for(;resto>0;indiceTemporal++){
+            q[indiceTemporal-1]=A/B;
+            t=resto;
+            resto=A%B;
+            w[indiceTemporal]=w[indiceTemporal-2]-w[indiceTemporal-1]*q[indiceTemporal-1];
+            x[indiceTemporal]=x[indiceTemporal-2]-x[indiceTemporal-1]*q[indiceTemporal-1];
+            A=B;
+            B=resto;
+        }
+        int c=x[indiceTemporal-2]*C/t;
+        int m=n/t;
+
+        while(c<0){
+            c=c+m;
+        }
+
+        if(C%t==0){
+            return new int[] { c, m }; 
+        }
+        else{
+            return null;
+        } 
     }
 
     /*
