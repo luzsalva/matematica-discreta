@@ -279,8 +279,54 @@ class Entrega {
      * Podeu soposar que `a` està ordenat de menor a major.
      */
     static boolean exercici1(int[] a, int[][] rel) {
-      return false; // TO DO
+    // Check if the relation is reflexive
+    for (int i = 0; i < a.length; i++) {
+        boolean reflexiva = false;
+        for (int j = 0; j < rel.length; j++) {
+            if (rel[j][0] == a[i] && rel[j][1] == a[i]) {
+                reflexiva = true;
+                break;
+            }
+        }
+        if (!reflexiva) {
+            return false;
+        }
     }
+
+    // Check if the relation is symmetric
+    for (int i = 0; i < rel.length; i++) {
+        boolean simetrica = false;
+        for (int j = 0; j < rel.length; j++) {
+            if (rel[i][0] == rel[j][1] && rel[i][1] == rel[j][0]) {
+                simetrica = true;
+                break;
+            }
+        }
+        if (!simetrica) {
+            return false;
+        }
+    }
+
+    // Check if the relation is transitive
+    for (int i = 0; i < rel.length; i++) {
+        for (int j = 0; j < rel.length; j++) {
+            if (rel[i][1] == rel[j][0]) {
+                boolean transitiva = false;
+                for (int k = 0; k < rel.length; k++) {
+                    if (rel[i][0] == rel[k][0] && rel[j][1] == rel[k][1]) {
+                        transitiva = true;
+                        break;
+                    }
+                }
+                if (!transitiva) {
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
 
     /*
      * Comprovau si la relació `rel` definida sobre `a` és d'equivalència. Si ho és, retornau el
