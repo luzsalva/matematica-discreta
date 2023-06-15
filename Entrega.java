@@ -149,7 +149,7 @@ class Entrega {
     System.out.println("Ejercicio 3 Tema 1 - VERDADERO ");
     return true;
 }
-    }
+    
 
     /*
      * És cert que (∀x. P(x)) -> (∀x. Q(x)) ?
@@ -255,6 +255,8 @@ class Entrega {
       );
     }
   }
+  
+
 
   /*
    * Aquí teniu els exercicis del Tema 2 (Conjunts).
@@ -1044,33 +1046,27 @@ static int teoremaChinoResto(int x1, int m1, int x2, int m2) {
      * No podeu utilitzar `long` per solucionar aquest problema. Necessitareu l'exercici 3a.
      * No, tampoc podeu utilitzar `double`.
      */
-      static int exercici3b(int n) {
-          ArrayList<Integer> factoresPrimos = exercici3a(n);
-          int phi = 1;
+static int exercici3b(int n) {
+    ArrayList<Integer> factoresPrimos = exercici3a(n);
+    int phi = 1;
 
-          while (!factoresPrimos.isEmpty()) {
-              int numeroPrimoActual = factoresPrimos.get(0);
-              int repeticionPrimo = 0;
+    while (!factoresPrimos.isEmpty()) {
+        // Obtener el primer factor primo 
+        int numeroPrimoActual = factoresPrimos.get(0);
+        // contador para almacenar el número de veces que este factor primo aparece en la lista
+        int repeticionPrimo = 0;
+        while (!factoresPrimos.isEmpty() && factoresPrimos.get(0) == numeroPrimoActual) {
+            repeticionPrimo++;
+            factoresPrimos.remove(0);
+        }
 
-              while (!factoresPrimos.isEmpty() && factoresPrimos.get(0) == numeroPrimoActual) {
-                  repeticionPrimo++;
-                  factoresPrimos.remove(0);
-              }
-              int potenciaActual = 1;
-              int potenciaAnterior = 1;
+        // Actualizar el valor de phi 
+        phi *= (Math.pow(numeroPrimoActual, repeticionPrimo) - Math.pow(numeroPrimoActual, repeticionPrimo - 1));
+    }
 
-              for (int i = 1; i <= repeticionPrimo; i++) {
-                  potenciaActual *= numeroPrimoActual;
-                  potenciaAnterior *= numeroPrimoActual;
-              }
-
-              potenciaAnterior /= numeroPrimoActual;
-              phi *= (potenciaActual - potenciaAnterior);
-          }
-
-          phi *= n * n;
-          return phi;
-      }
+    // Multiplicar phi por n^2 y devolver el resultado
+    return phi * n * n;
+}
 
     /*
      * Aquí teniu alguns exemples i proves relacionades amb aquests exercicis (vegeu `main`)
@@ -1151,7 +1147,9 @@ static int teoremaChinoResto(int x1, int m1, int x2, int m2) {
   static void assertThat(boolean b) {
     if (!b)
       throw new AssertionError();
-  }
+    }
 }
+
+
 
 // vim: set textwidth=100 shiftwidth=2 expandtab :
