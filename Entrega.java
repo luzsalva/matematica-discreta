@@ -1060,8 +1060,15 @@ static int exercici3b(int n) {
             factoresPrimos.remove(0);
         }
 
+        // Calcular potenciaActual y potenciaAnterior 
+        int potenciaActual = 1;
+        for (int i = 0; i < repeticionPrimo; i++) {
+            potenciaActual *= numeroPrimoActual;
+        }
+        int potenciaAnterior = potenciaActual / numeroPrimoActual;
+
         // Actualizar el valor de phi 
-        phi *= (Math.pow(numeroPrimoActual, repeticionPrimo) - Math.pow(numeroPrimoActual, repeticionPrimo - 1));
+        phi *= (potenciaActual - potenciaAnterior);
     }
 
     // Multiplicar phi por n^2 y devolver el resultado
